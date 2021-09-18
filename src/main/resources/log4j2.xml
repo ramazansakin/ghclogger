@@ -35,6 +35,14 @@
             <DefaultRolloverStrategy max="10"/>
         </RollingFile>
 
+        <!-- Sample Logging to mail appender -->
+        <SMTP name="mail" subject="Error Log" to="sample-to@mail.com" from="sample-from@mail.com"
+              smtpHost="mail.foo.example.com" smtpPort="465" smtpUsername="sample-from@mail.com" smtpPassword="*******" smtpProtocol="smtps"
+              bufferSize="50">
+            <HtmlLayout/>
+            <PatternLayout pattern="${LOG_PATTERN}" />
+        </SMTP>
+
     </Appenders>
 
     <Loggers>
@@ -43,6 +51,9 @@
         </Logger>
         <Logger name="com.sakinramazan" level="debug" additivity="false">
             <appender-ref ref="errorLogger"/>
+        </Logger>
+        <Logger name="scratch" level="DEBUG" additivity="false">
+            <AppenderRef ref="mail" level="ERROR" />
         </Logger>
         <Root level="info">
             <AppenderRef ref="ConsoleAppender"/>
