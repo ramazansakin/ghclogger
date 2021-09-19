@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN" monitorInterval="25">
+<!-- we need to set packages as  our custom appenders' base package path -->
+<Configuration packages="com.sakinramazan.ghclogger.customappender" status="WARN" monitorInterval="25">
     <Properties>
         <Property name="LOG_PATTERN">
             %d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${hostName} --- [%15.15t] %-40.40c{1.} : %m%n%ex
@@ -30,18 +31,21 @@
             <LevelRangeFilter minLevel="ERROR" maxLevel="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="${LOG_PATTERN}"/>
             <Policies>
-                <SizeBasedTriggeringPolicy size="15000KB" />
+                <SizeBasedTriggeringPolicy size="15000KB"/>
             </Policies>
             <DefaultRolloverStrategy max="10"/>
         </RollingFile>
 
         <!-- Sample Logging to mail appender -->
         <SMTP name="mail" subject="Error Log" to="sample-to@mail.com" from="sample-from@mail.com"
-              smtpHost="mail.foo.example.com" smtpPort="465" smtpUsername="sample-from@mail.com" smtpPassword="*******" smtpProtocol="smtps"
+              smtpHost="mail.foo.example.com" smtpPort="465" smtpUsername="sample-from@mail.com" smtpPassword="*******"
+              smtpProtocol="smtps"
               bufferSize="50">
             <HtmlLayout/>
-            <PatternLayout pattern="${LOG_PATTERN}" />
+            <PatternLayout pattern="${LOG_PATTERN}"/>
         </SMTP>
+
+        <MyAppender name="MyCustomAppender"/>
 
     </Appenders>
 
@@ -53,7 +57,10 @@
             <appender-ref ref="errorLogger"/>
         </Logger>
         <Logger name="scratch" level="DEBUG" additivity="false">
-            <AppenderRef ref="mail" level="ERROR" />
+            <AppenderRef ref="mail" level="ERROR"/>
+        </Logger>
+        <Logger name="scratch" level="DEBUG" additivity="false">
+            <AppenderRef ref="MapAppender"/>
         </Logger>
         <Root level="info">
             <AppenderRef ref="ConsoleAppender"/>
